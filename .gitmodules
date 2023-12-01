@@ -1,0 +1,12 @@
+[submodule "iqa_metrics/UNIQUE-Unsupervised-Image-Quality-Estimation"]
+	path = iqa_metrics/UNIQUE-Unsupervised-Image-Quality-Estimation
+	url = git@github.com:olivesgatech/UNIQUE-Unsupervised-Image-Quality-Estimation.git
+[submodule "iqa_metrics/MS-UNIQUE"]
+	path = iqa_metrics/MS-UNIQUE
+	url = git@github.com:olivesgatech/MS-UNIQUE.git
+[submodule "iqa_metrics/CSV"]
+	path = iqa_metrics/CSV
+	url = git@github.com:olivesgatech/CSV.git
+[submodule "iqa_metrics/SUMMER"]
+	path = iqa_metrics/SUMMER
+	url = git@github.com:olivesgatech/SUMMER.git
