@@ -47,7 +47,7 @@ for ii = 1:length(grouped_dir)
 
             no_challenge_img_path = current_group(no_challenge_img_idx); 
 
-            no_challenge_img = imread(no_challenge_img_path{1});
+            no_challenge_img = imread(no_challenge_img_path);
 
             % Challenge images 
 
