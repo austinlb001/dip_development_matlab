@@ -1,0 +1,18 @@
+% AUTHORS: BARBER, AUSTIN L; DUFFY-DENO, CAITRIN
+% FILE NAME: median.m
+% DATE CREATED: 2023 NOVEMBER 30
+% DATE LAST UPDATED: 2023 NOVEMBER 30
+% PURPOSE: THIS FILE CONTAINS THE CODE FOR GETTING THE MEDIAN FILTER
+
+
+%%%%%%%%%%%%%%% F U N C T I O N S %%%%%%%%%%%%%%%
+
+% NAME: median
+% TYPE: FUNCTION
+% PARAMETERS: file_paths: list, no_challenge_image: np.ndarray
+% RETURN: list
+% PURPOSE: FUNCTION FOR APPLYING THE MEDIAN FILTER ON A SET IMAGES.
+% NOTES: 
+function median_filt = median_filter(array)
+    if length(size(array)) == 
+end
