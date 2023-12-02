@@ -47,32 +47,35 @@ classdef datasets_reading
             for idx1=background
                 for idx2=device
                     for idx3=objectOrientation
-                        iter2 = 0;
+                        iter2_color = 0;
+                        iter2_gray = 0;
                         file_store = cell(0);
                         for idx4=object_type  
                             
                             % HANDLE COLOR IMAGES
-                            for idx5 = challengeTypeColor
-                                file_beginning(idx5) = strcat(num2str(idx1),'_',num2str(idx2),'_',num2str(idx3),'_',num2str(idx4,'%03.f'),'_',num2str(idx5,'%02.f'));
-                            end
-                            file_string = contains(full_path,file_beginning);
+                                file_beginning_color = strcat(num2str(idx1),"_",num2str(idx2),"_",num2str(idx3),"_",num2str(idx4,'%03.f'),"_",num2str(challengeTypeColor','%02.f'));
+                                                        
+
+                            file_string = contains(full_path,cellstr(file_beginning_color));
+
                             if ~all(file_string==0)
-                                iter2 = iter2 + 1;
-                                file_store{iter2} = full_path(file_string);
+                                iter2_color = iter2_color + 1;
+                                file_store_color{iter2_color} = full_path(file_string);
                             end
-                            
                             % HANDLE GRAYSCALE IMAGES
-                            for idx5 = challengeTypeGray
-                                file_beginning(idx5) = strcat(num2str(idx1),'_',num2str(idx2),'_',num2str(idx3),'_',num2str(idx4,'%03.f'),'_',num2str(idx5,'%02.f'));
-                            end
-                            file_string = contains(full_path,file_beginning);
+                            
+                                file_beginning_gray = strcat(num2str(idx1),'_',num2str(idx2),'_',num2str(idx3),'_',num2str(idx4,'%03.f'),'_',num2str(challengeTypeGray','%02.f'));
+                            
+                            file_string = contains(full_path,cellstr(file_beginning_gray));
+                            
                             if ~all(file_string==0)
-                                iter2 = iter2 + 1;
-                                file_store{iter2} = full_path(file_string);
+                                iter2_gray = iter2_gray + 1;
+                                file_store_gray{iter2_gray} = full_path(file_string);
                             end
                         end
                         iter1 = iter1 + 1;
-                        file_storage{iter1} = file_store;
+                        file_storage_color{iter1} = file_store_color;
+                        file_storage_gray{iter1} = file_store_gray;
                     end
                 end
             end
