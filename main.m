@@ -59,13 +59,13 @@ parfor ii = 1:length(grouped_dir)
             current_img = imread(current_img_path{1});
 
             % Median filter
-            median_filt_img = median_filter(current_img,7,'zeros');
+            %median_filt_img = median_filter(current_img,7,'zeros');
 
             % Wavelet filter 
 
 
             % Metrics calculated 
-            [psnr_value,ssim_value,cw_ssim_value,UNIQUE_value,MS_UNIQUE_value,csv_value, SUMMER_value] = metrics(median_filt_img,no_challenge_img);
+            [psnr_value,ssim_value,cw_ssim_value,UNIQUE_value,MS_UNIQUE_value,csv_value, SUMMER_value] = metrics(current_img,no_challenge_img);
             
 
             % Metadata extract 
@@ -87,6 +87,9 @@ parfor ii = 1:length(grouped_dir)
     end 
 end
 
+% WRITE TABLE TO EXCEL SPREADSHEET
+writetable(store_CURE_OR, "cure-or_baseline.xlsx", "Rang", "A1");
+
 
 %% CURE - TSR 
 
@@ -98,63 +101,55 @@ end
 
 for ii = 1 %:length(grouped_dir)
     for jj = 1:2 % length(grouped_dir{1,1})
-    disp(ii)
+        disp(ii)
         % Find original/ no challenge image 
         current_group = grouped_dir{1,ii}{1,jj};
 
-            challenge_check=contains(current_group,'no_challenge');
+        challenge_check=contains(current_group,'no_challenge');
 
-            no_challenge_img_idx = find(challenge_check); 
+        no_challenge_img_idx = find(challenge_check); 
 
-            % no challenge image path
+        % no challenge image path
+        no_challenge_img_path = current_group(no_challenge_img_idx); 
+        no_challenge_img = imread(no_challenge_img_path{1});
 
-            no_challenge_img_path = current_group(no_challenge_img_idx); 
+        % Challenge images 
+        current_group(no_challenge_img_idx)=[];
+        for challenge = 1:length(current_group)
+            current_img_path = current_group(challenge);
+            current_img = imread(current_img_path{1});
 
-            no_challenge_img = imread(no_challenge_img_path{1});
+            % Median filter
+            median_filt_img = median_filter(current_img,7,'zeros');
 
-            % Challenge images 
-
-            current_group(no_challenge_img_idx)=[];
-
-            for challenge = 1:length(current_group)
-                current_img_path = current_group(challenge);
-                current_img = imread(current_img_path{1});
-
-                % Median filter
-                median_filt_img = median_filter(current_img,7,'zeros');
-
-                % Wavelet filter 
+            % Wavelet filter 
 
 
-                % Metrics calculated 
-                [psnr_value,ssim_value,cw_ssim_value,UNIQUE_value,MS_UNIQUE_value,csv_value, SUMMER_value] = metrics(current_img,no_challenge_img);
-                
+            % Metrics calculated 
+            [psnr_value,ssim_value,cw_ssim_value,UNIQUE_value,MS_UNIQUE_value,csv_value, SUMMER_value] = metrics(current_img,no_challenge_img);
+            
 
-                % Metadata extract 
-                [~,name,~] = fileparts(current_group(challenge));
+            % Metadata extract 
+            [~,name,~] = fileparts(current_group(challenge));
 
-                file_split = split(name,'_');
-                
-                background = file_split{1};
-                device = file_split{2};
-                objOri = file_split{3};
-                objID = file_split{4};
-                chType = file_split{5};
-                chLev = file_split{6};
+            file_split = split(name,'_');
+            
+            background = file_split{1};
+            device = file_split{2};
+            objOri = file_split{3};
+            objID = file_split{4};
+            chType = file_split{5};
+            chLev = file_split{6};
 
-                % Update table 
-                if ~exist('store_CURE_TSR')
-                    store_CURE_TSR = cell2table({background, device, objOri, objID, chType, chLev, psnr_value,ssim_value,cw_ssim_value,UNIQUE_value,MS_UNIQUE_value,csv_value, SUMMER_value});
-                    store_CURE_TSR.Properties.VariableNames = ["Background", "DeviceID", "Object Orientation", "Object ID", "Challenge Type", "Challenge Level", "PSNR", "SSIM", "CW-SSIM", "UNIQUE", "MS-UNIQUE","CSV","SUMMER"];
-                else
-
-                    new = {background, device, objOri, objID, chType, chLev, psnr_value,ssim_value,cw_ssim_value,UNIQUE_value,MS_UNIQUE_value,csv_value, SUMMER_value};
-                    store_CURE_TSR = [store_CURE_TSR;new];
-                end 
-
-
-                end              
-
+            % Update table 
+            if ~exist('store_CURE_TSR')
+                store_CURE_TSR = cell2table({background, device, objOri, objID, chType, chLev, psnr_value,ssim_value,cw_ssim_value,UNIQUE_value,MS_UNIQUE_value,csv_value, SUMMER_value});
+                store_CURE_TSR.Properties.VariableNames = ["Background", "DeviceID", "Object Orientation", "Object ID", "Challenge Type", "Challenge Level", "PSNR", "SSIM", "CW-SSIM", "UNIQUE", "MS-UNIQUE","CSV","SUMMER"];
+            else
+                new = {background, device, objOri, objID, chType, chLev, psnr_value,ssim_value,cw_ssim_value,UNIQUE_value,MS_UNIQUE_value,csv_value, SUMMER_value};
+                store_CURE_TSR = [store_CURE_TSR;new];
+            end 
+        end              
     end 
 end
 

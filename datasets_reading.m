@@ -38,44 +38,39 @@ classdef datasets_reading
 
             % CONSTRUCT FILE PATHS
             full_path = cell(size(file_list));
-            parfor ii=1:size(file_list,1)
+            for ii=1:size(file_list,1)
                 full_path{ii} = fullfile(file_list(ii).folder, file_list(ii).name);
             end
 
             % SORT FILE PATHS
             iter1 = 0;
+            file_store = cell(0);
             for idx1=background
                 for idx2=device
                     for idx3=objectOrientation
-                        iter2_color = 0;
-                        iter2_gray = 0;
-                        file_store = cell(0);
+                        iter2 = 0;
                         for idx4=object_type  
                             
                             % HANDLE COLOR IMAGES
-                                file_beginning_color = strcat(num2str(idx1),"_",num2str(idx2),"_",num2str(idx3),"_",num2str(idx4,'%03.f'),"_",num2str(challengeTypeColor','%02.f'));
-                                                        
-
-                            file_string = contains(full_path,cellstr(file_beginning_color));
-
+                            file_beginning = strcat(num2str(idx1),"_",num2str(idx2),"_",num2str(idx3),"_",num2str(idx4,'%03.f'),"_",num2str(challengeTypeColor','%02.f'));                          
+                            file_string = contains(full_path,cellstr(file_beginning));
                             if ~all(file_string==0)
-                                iter2_color = iter2_color + 1;
-                                file_store_color{iter2_color} = full_path(file_string);
+                                iter2 = iter2 + 1;
+                                file_store{iter2} = full_path(file_string);
+                                full_path(file_string) = [];
                             end
+                            
                             % HANDLE GRAYSCALE IMAGES
-                            
-                                file_beginning_gray = strcat(num2str(idx1),'_',num2str(idx2),'_',num2str(idx3),'_',num2str(idx4,'%03.f'),'_',num2str(challengeTypeGray','%02.f'));
-                            
-                            file_string = contains(full_path,cellstr(file_beginning_gray));
-                            
+                            file_beginning = strcat(num2str(idx1),'_',num2str(idx2),'_',num2str(idx3),'_',num2str(idx4,'%03.f'),'_',num2str(challengeTypeGray','%02.f'));
+                            file_string = contains(full_path,cellstr(file_beginning));          
                             if ~all(file_string==0)
-                                iter2_gray = iter2_gray + 1;
-                                file_store_gray{iter2_gray} = full_path(file_string);
+                                iter2 = iter2 + 1;
+                                file_store{iter2} = full_path(file_string);
+                                full_path(file_string) = [];
                             end
                         end
                         iter1 = iter1 + 1;
-                        file_storage_color{iter1} = file_store_color;
-                        file_storage_gray{iter1} = file_store_gray;
+                        file_storage{iter1} = file_store;
                     end
                 end
             end
@@ -199,7 +194,7 @@ classdef datasets_reading
             end
 
         end
-        
+  
     end
     
 end
