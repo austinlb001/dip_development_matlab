@@ -178,6 +178,9 @@ for ii = 1 %:length(grouped_dir)
     end 
 end
 
+%% CURE - TSD 
+
+grouped_dir = datasets_reading.cure_tsd_paths;
 
  
 
