@@ -16,9 +16,18 @@ classdef datasets_reading
             % OBJECT TYPE: 000:100 (INCLUDES 100)
             object_type = 1:1:100;
 
+<<<<<<< HEAD
+            % CHALLENGETYPE: NO CHALLENGE 01, CHALLENGE 02:09 (INCLUDES 09), GRAYSCALE NO CHALLENGE 10, GRAYSCALE 11:18 (INCLUDES 18)
+            challengeTypeColor = 1:1:9;
+            challengeTypeGray = 10:1:18;
+            
+            % CHALLENGELEVEL: NO CHALLENGE 0, 1:5 (INCLUDES 5)
+            
+=======
             %CHALLENGETYPE: NO CHALLENGE 01, CHALLENGE 02:09 (INCLUDES 09), GRAYSCALE NO CHALLENGE 10, GRAYSCALE 11:18 (INCLUDES 18)
             % CHALLENGELEVEL: NO CHALLENGE 0, 1:5 (INCLUDES 5)
 
+>>>>>>> e1a6d9ab046f1e03291bbe31a6694612a2f38aa5
             % ASSIGN ROOT DIRECTORY
             if getenv('username') == "Katie"
                 root_directory = "C:\Users\Katie\Documents\School\GaTech\Fall 2023 -Digital Image Processing\dippykit\Project_Images\CURE_OR\";
@@ -45,8 +54,16 @@ classdef datasets_reading
                 for idx2=device
                     for idx3=objectOrientation
                         iter2 = 0;
+<<<<<<< HEAD
+                        for idx4=object_type 
+                            file_beginning = zeros(size(ch))
+                            for idx5 = challengeTypeColor
+                                file_beginning = strcat(num2str(idx1),'_',num2str(idx2),'_',num2str(idx3),'_',num2str(idx4,'%03.f'),'_',num2str(idx5,'%03.f'));
+                            end
+=======
                         for idx4=object_type
                             file_beginning = strcat(num2str(idx1),'_',num2str(idx2),'_',num2str(idx3),'_',num2str(idx4,'%03.f'));
+>>>>>>> e1a6d9ab046f1e03291bbe31a6694612a2f38aa5
                             file_string = contains(full_path,file_beginning);
                             if ~all(file_string==0)
                                 iter2 = iter2 + 1;
