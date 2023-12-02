@@ -41,16 +41,16 @@ classdef datasets_reading
             
             % SORT FILE PATHS
             iter1 = 0;
-            parfor idx1=background 
-                parfor idx2=device 
-                    parfor idx3=objectOrientation
-                            iter2 = 0;
-                        parfor idx4=object_type 
+            for idx1=background 
+                for idx2=device 
+                    for idx3=objectOrientation
+                        iter2 = 0;
+                        for idx4=object_type 
                             file_beginning = strcat(num2str(idx1),'_',num2str(idx2),'_',num2str(idx3),'_',num2str(idx4,'%03.f'));
                             file_string = contains(full_path,file_beginning);
                             if ~all(file_string==0)
                                 iter2 = iter2 + 1;
-                            file_store{iter2} = full_path(file_string);
+                                file_store{iter2} = full_path(file_string);
                             end
                         end
                         iter1 = iter1 + 1;
@@ -108,13 +108,13 @@ classdef datasets_reading
                             file_string = contains(full_path,file_beginning) & name(end-3:end)==num2str(index,'%04.f');
                             if ~all(file_string==0)
                                 iter2 = iter2 + 1;
-                            file_store{iter2} = full_path(file_string);
+                                file_store{iter2} = full_path(file_string);
                             end
                     end
-                            iter1 = iter1 + 1;
-                            file_storage{iter1} = file_store;
-                end 
-            end 
+                    iter1 = iter1 + 1;
+                    file_storage{iter1} = file_store;
+                 end 
+             end 
         end 
-    end 
+    end
 end
