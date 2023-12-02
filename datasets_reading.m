@@ -16,7 +16,10 @@ classdef datasets_reading
             % OBJECT TYPE: 000:100 (INCLUDES 100)
             object_type = 1:1:100;
 
-            %CHALLENGETYPE: NO CHALLENGE 01, CHALLENGE 02:09 (INCLUDES 09), GRAYSCALE NO CHALLENGE 10, GRAYSCALE 11:18 (INCLUDES 18)
+            % CHALLENGETYPE: NO CHALLENGE 01, CHALLENGE 02:09 (INCLUDES 09), GRAYSCALE NO CHALLENGE 10, GRAYSCALE 11:18 (INCLUDES 18)
+            challengeTypeColor = 1:1:9;
+            challengeTypeGray = 10:1:18;
+            
             % CHALLENGELEVEL: NO CHALLENGE 0, 1:5 (INCLUDES 5)
             
             % ASSIGN ROOT DIRECTORY
@@ -45,8 +48,23 @@ classdef datasets_reading
                 for idx2=device 
                     for idx3=objectOrientation
                         iter2 = 0;
-                        for idx4=object_type 
-                            file_beginning = strcat(num2str(idx1),'_',num2str(idx2),'_',num2str(idx3),'_',num2str(idx4,'%03.f'));
+                        file_store = cell(0);
+                        for idx4=object_type  
+                            
+                            % HANDLE COLOR IMAGES
+                            for idx5 = challengeTypeColor
+                                file_beginning(idx5) = strcat(num2str(idx1),'_',num2str(idx2),'_',num2str(idx3),'_',num2str(idx4,'%03.f'),'_',num2str(idx5,'%02.f'));
+                            end
+                            file_string = contains(full_path,file_beginning);
+                            if ~all(file_string==0)
+                                iter2 = iter2 + 1;
+                                file_store{iter2} = full_path(file_string);
+                            end
+                            
+                            % HANDLE GRAYSCALE IMAGES
+                            for idx5 = challengeTypeGray
+                                file_beginning(idx5) = strcat(num2str(idx1),'_',num2str(idx2),'_',num2str(idx3),'_',num2str(idx4,'%03.f'),'_',num2str(idx5,'%02.f'));
+                            end
                             file_string = contains(full_path,file_beginning);
                             if ~all(file_string==0)
                                 iter2 = iter2 + 1;
