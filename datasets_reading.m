@@ -86,9 +86,9 @@ classdef datasets_reading
 
             % GET ALL FILES
             if ispc
-                file_list = dir(fullfile(root_directory, '**\*.jpg'));
+                file_list = dir(fullfile(root_directory, '**\*.bmp'));
             elseif isunix
-                file_list = dir(fullfile(root_directory, '**/*.jpg'));
+                file_list = dir(fullfile(root_directory, '**/*.bmp'));
             end
 
             % CONSTRUCT FILE PATHS
