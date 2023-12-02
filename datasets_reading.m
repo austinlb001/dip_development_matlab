@@ -99,14 +99,19 @@ function file_storage = cure_tsr_paths
                 for idx2 = signType
                     iter2 = 0;
                     for idx3 = index
-                        [~,name,~] = fileparts(full_path);
                             file_beginning = strcat(num2str(idx1,'%02.f'),'_',num2str(idx2,'%02.f'));
-                            file_string = contains(full_path,file_beginning) & name(end-3:end)==num2str(index,'%04.f');
                             if ~all(file_string==0)
                                 iter2 = iter2 + 1;
                             file_store{iter2} = full_path(file_string);
+                            for iterator = 1:length(full_path(file_string))
+                                current_fi
+                                [~,name,~] = fileparts(full_path);
+                                if name(end-3:end)==num2str(index,'04.f')
+                                    %file_store{iter2}=
+                                end
+
                             end
-                    end
+                            end
                             iter1 = iter1 + 1;
                             file_storage{iter1} = file_store;
                             end 
@@ -117,4 +122,5 @@ end
    % CHALLENGETYPE: 00 - No challenge; 01 - Decolorization; 02 - Lens blur; 03 - Codec error; 
         % 04 - Darkening; 05 - Dirty lens; 06 - Exposure; 07 - Gaussian blur; 08 - Noise; 09 - Rain; 10 - Shadow; 11 - Snow; 12 - Haze
     % CHALLENGELEVEL: NO CHALLENGE 0, 1:5 (INCLUDES 5)
+    end
 end
