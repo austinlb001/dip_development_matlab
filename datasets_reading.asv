@@ -73,48 +73,53 @@ function file_storage = cure_tsr_paths
     % signType: 01:14 (INCLUDES 14)
     signType = 1:1:14;
 
-    % index: 1:1195
-    index = [1:1195];
+  % index: 1:1195
+
+  index = [1:1195];
+
+    file_paths_temp = [];
+            file_paths = [];
+            files_store = [];
             
-    % ASSIGN ROOT DIRECTORY
-    if getenv('username') == "Katie"
-        root_directory = "C:\Users\Katie\Documents\School\GaTech\Fall 2023 -Digital Image Processing\dippykit\Project_Images\CURE_TSR\Real_Test\Real_Test\";
-    elseif getenv("USER") == "austinlb001"
-        root_directory = "/run/media/austinlb001/DATA2/CURE-TSR/test/Real_Test/";
-    end
-    
-    % GET ALL FILES
-    if ispc
-        file_list = dir(fullfile(root_directory, '**\*.jpg'));
-    elseif isunix
-        file_list = dir(fullfile(root_directory, '**/*.jpg'));
-    end
-    
-    % CONSTRUCT FILE PATHS
-    full_path = cell(size(file_list));
-    for ii=1:size(file_list,1)
-        full_path{ii} = fullfile(file_list(ii).name, file_list(ii).folder); 
-    end 
-    
-    % SORT FILES
-    iter1 = 0;
-    for idx1 = sequenceType
-        for idx2 = signType
-            iter2 = 0;
-            for idx3 = index
-                [~,name,~] = fileparts(full_path);
-                    file_beginning = strcat(num2str(idx1,'%02.f'),'_',num2str(idx2,'%02.f'));
-                    file_string = contains(full_path,file_beginning) & name(end-3:end)==num2str(index,'%04.f');
-                    if ~all(file_string==0)
-                        iter2 = iter2 + 1;
-                    file_store{iter2} = full_path(file_string);
-                    end
-            end
-                    iter1 = iter1 + 1;
-                    file_storage{iter1} = file_store;
-                    end 
-                end 
+            % File lists
+            root_directory = "C:\Users\Katie\Documents\School\GaTech\Fall 2023 -Digital Image Processing\dippykit\Project_Images\CURE_TSR\Real_Test\Real_Test\";
+            file_list = dir(fullfile(root_directory, '**\*.bmp'));
+
+            % Full file paths
+
+            for ii=1:size(file_list,1)
+            
+                file_name = file_list(ii).name;
+                
+                file_dir = file_list(ii).folder;
+
+                full_path{ii} = fullfile(file_dir,file_name); 
+
             end 
+
+            iter1 = 0;
+            for idx1 = sequenceType
+                for idx2 = signType
+                    iter2 = 0;
+                    for idx3 = index
+                            file_beginning = strcat(num2str(idx1,'%02.f'),'_',num2str(idx2,'%02.f'));
+                            if ~all(file_string==0)
+                                iter2 = iter2 + 1;
+                            file_store{iter2} = full_path(file_string);
+                            for iterator = 1:length(full_path(file_string))
+                                current_fi
+                                [~,name,~] = fileparts(full_path);
+                                if name(end-3:end)==num2str(index,'04.f')
+                                    %file_store{iter2}=
+                                end
+
+                            end
+                            end
+                            iter1 = iter1 + 1;
+                            file_storage{iter1} = file_store;
+                            end 
+                        end 
+                    end 
 end 
 
    % CHALLENGETYPE: 00 - No challenge; 01 - Decolorization; 02 - Lens blur; 03 - Codec error; 

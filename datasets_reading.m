@@ -117,4 +117,5 @@ end
    % CHALLENGETYPE: 00 - No challenge; 01 - Decolorization; 02 - Lens blur; 03 - Codec error; 
         % 04 - Darkening; 05 - Dirty lens; 06 - Exposure; 07 - Gaussian blur; 08 - Noise; 09 - Rain; 10 - Shadow; 11 - Snow; 12 - Haze
     % CHALLENGELEVEL: NO CHALLENGE 0, 1:5 (INCLUDES 5)
+    end
 end

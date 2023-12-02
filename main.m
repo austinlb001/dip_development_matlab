@@ -30,11 +30,19 @@ addpath wavelet_filter_method/
 
 % generate file paths that are grouped by unique image scene
  grouped_dir = datasets_reading.cure_or_paths;
-
+ 
 % iterate through groups 
+% Create table 
+            
+store_CURE_OR = cell2table({'00', '00','00' , '00', '00', '00', 0,0,0,0,0,0, 0});
+                    
 
-for ii = 1%:length(grouped_dir)
-    for jj = 1:2% length(grouped_dir{1,1})
+
+store_CURE_OR.Properties.VariableNames = ["Background", "DeviceID", "Object Orientation", "Object ID", "Challenge Type", "Challenge Level", "PSNR", "SSIM", "CW-SSIM", "UNIQUE", "MS-UNIQUE","CSV","SUMMER"];
+            
+
+parfor ii = 1:length(grouped_dir)
+    for jj = 1:length(grouped_dir{1,1})
     disp(ii)
         % Find original/ no challenge image 
         current_group = grouped_dir{1,ii}{1,jj};
@@ -53,7 +61,8 @@ for ii = 1%:length(grouped_dir)
 
             current_group(no_challenge_img_idx)=[];
 
-            for challenge = 1:length(current_group)
+
+for challenge = 1:length(current_group)
                 current_img_path = current_group(challenge);
                 current_img = imread(current_img_path{1});
 
@@ -80,14 +89,11 @@ for ii = 1%:length(grouped_dir)
                 chLev = file_split{6};
 
                 % Update table 
-                if ~exist('store_CURE_OR')
-                    store_CURE_OR = cell2table({background, device, objOri, objID, chType, chLev, psnr_value,ssim_value,cw_ssim_value,UNIQUE_value,MS_UNIQUE_value,csv_value, SUMMER_value});
-                    store_CURE_OR.Properties.VariableNames = ["Background", "DeviceID", "Object Orientation", "Object ID", "Challenge Type", "Challenge Level", "PSNR", "SSIM", "CW-SSIM", "UNIQUE", "MS-UNIQUE","CSV","SUMMER"];
-                else
+           
 
                     new = {background, device, objOri, objID, chType, chLev, psnr_value,ssim_value,cw_ssim_value,UNIQUE_value,MS_UNIQUE_value,csv_value, SUMMER_value};
                     store_CURE_OR = [store_CURE_OR;new];
-                end 
+                 
 
 
                
