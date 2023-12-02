@@ -141,7 +141,7 @@ for ii = 1 %:length(grouped_dir)
 
 
                 % Metrics calculated 
-                [psnr_value,ssim_value,cw_ssim_value,UNIQUE_value,MS_UNIQUE_value,csv_value, SUMMER_value] = metrics(median_filt_img,no_challenge_img);
+                [psnr_value,ssim_value,cw_ssim_value,UNIQUE_value,MS_UNIQUE_value,csv_value, SUMMER_value] = metrics(current_img,no_challenge_img);
                 
 
                 % Metadata extract 
