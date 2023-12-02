@@ -31,35 +31,28 @@ addpath wavelet_filter_method/
 % generate file paths that are grouped by unique image scene
  grouped_dir = datasets_reading.cure_or_paths;
  
-% iterate through groups 
+
 % Create table 
-            
 store_CURE_OR = cell2table({'00', '00','00' , '00', '00', '00', 0,0,0,0,0,0, 0});
-                    
-
-
 store_CURE_OR.Properties.VariableNames = ["Background", "DeviceID", "Object Orientation", "Object ID", "Challenge Type", "Challenge Level", "PSNR", "SSIM", "CW-SSIM", "UNIQUE", "MS-UNIQUE","CSV","SUMMER"];
             
-
+% iterate through groups 
 parfor ii = 1:length(grouped_dir)
-    for jj = 1:length(grouped_dir{1,1})
     disp(ii)
+    for jj = 1:length(grouped_dir{1,1})
         % Find original/ no challenge image 
         current_group = grouped_dir{1,ii}{1,jj};
 
-            challenge_check=contains(current_group,'no_challenge');
+        challenge_check=contains(current_group,'no_challenge');
 
-            no_challenge_img_idx = find(challenge_check); 
+        no_challenge_img_idx = find(challenge_check); 
 
-            % no challenge image path
+        % no challenge image path
+        no_challenge_img_path = current_group(no_challenge_img_idx); 
+        no_challenge_img = imread(no_challenge_img_path{1});
 
-            no_challenge_img_path = current_group(no_challenge_img_idx); 
-
-            no_challenge_img = imread(no_challenge_img_path{1});
-
-            % Challenge images 
-
-            current_group(no_challenge_img_idx)=[];
+        % Challenge images 
+        current_group(no_challenge_img_idx)=[];
 
 
 for challenge = 1:length(current_group)
