@@ -109,7 +109,7 @@ classdef datasets_reading
 
             % CONSTRUCT FILE PATHS
             full_path = cell(size(file_list));
-            for ii=1:size(file_list,1)
+            parfor ii=1:size(file_list,1)
                 full_path{ii} = fullfile(file_list(ii).folder, file_list(ii).name);
             end
 
