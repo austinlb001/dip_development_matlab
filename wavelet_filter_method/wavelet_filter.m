@@ -13,7 +13,7 @@
 % RETURN: array
 % PURPOSE: FUNCTION FOR APPLYING THE MEDIAN FILTER ON A SET IMAGES.
 % NOTES: 
-function wavelet_filt_img = wavelet(image, wavelet_type)
+function wavelet_filt_img = wavelet_filter(image, wavelet_type)
         
     % FIND THE MAXIMUM LEVEL
     levels = wmaxlev(size(image), wavelet_type);

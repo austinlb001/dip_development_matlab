@@ -140,7 +140,7 @@ grouped_dir = datasets_reading.cure_tsr_paths;
 
 % iterate through groups 
 for ii = 1 %:length(grouped_dir)
-    for jj = 1:2 % length(grouped_dir{1,1})
+    for jj = 1:2 % length(grouped_dir{1,ii})
         disp(ii)
         % Find original/ no challenge image 
         current_group = grouped_dir{1,ii}{1,jj};
