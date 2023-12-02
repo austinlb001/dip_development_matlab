@@ -21,7 +21,8 @@ classdef datasets_reading
             challengeTypeGray = 10:1:18;
             
             % CHALLENGELEVEL: NO CHALLENGE 0, 1:5 (INCLUDES 5)
-
+           
+            
             % ASSIGN ROOT DIRECTORY
             if getenv('username') == "Katie"
                 root_directory = "C:\Users\Katie\Documents\School\GaTech\Fall 2023 -Digital Image Processing\dippykit\Project_Images\CURE_OR\";
@@ -47,35 +48,32 @@ classdef datasets_reading
             for idx1=background
                 for idx2=device
                     for idx3=objectOrientation
-                        iter2_color = 0;
-                        iter2_gray = 0;
-                        file_store = cell(0);
-                        for idx4=object_type  
-                            
-                            % HANDLE COLOR IMAGES
-                                file_beginning_color = strcat(num2str(idx1),"_",num2str(idx2),"_",num2str(idx3),"_",num2str(idx4,'%03.f'),"_",num2str(challengeTypeColor','%02.f'));
-                                                        
-
-                            file_string = contains(full_path,cellstr(file_beginning_color));
-
-                            if ~all(file_string==0)
-                                iter2_color = iter2_color + 1;
-                                file_store_color{iter2_color} = full_path(file_string);
+                        iter2 = 0;
+                        for idx4=object_type 
+                            file_beginning = zeros(size(ch))
+                            for idx5 = challengeTypeColor
+                                file_beginning = strcat(num2str(idx1),'_',num2str(idx2),'_',num2str(idx3),'_',num2str(idx4,'%03.f'),'_',num2str(idx5,'%03.f'));
                             end
-                            % HANDLE GRAYSCALE IMAGES
-                            
-                                file_beginning_gray = strcat(num2str(idx1),'_',num2str(idx2),'_',num2str(idx3),'_',num2str(idx4,'%03.f'),'_',num2str(challengeTypeGray','%02.f'));
-                            
-                            file_string = contains(full_path,cellstr(file_beginning_gray));
-                            
+                            file_string = contains(full_path,file_beginning);
                             if ~all(file_string==0)
-                                iter2_gray = iter2_gray + 1;
-                                file_store_gray{iter2_gray} = full_path(file_string);
+                                iter2 = iter2 + 1;
+                                file_store{iter2} = full_path(file_string);
                             end
                         end
                         iter1 = iter1 + 1;
-                        file_storage_color{iter1} = file_store_color;
-                        file_storage_gray{iter1} = file_store_gray;
+                        iter2 = 0;
+                        for idx4=object_type
+                            file_beginning = strcat(num2str(idx1),'_',num2str(idx2),'_',num2str(idx3),'_',num2str(idx4,'%03.f'));
+                            file_string = contains(full_path,file_beginning);
+                            if ~all(file_string==0)
+                                iter2 = iter2 + 1;
+                                file_store{iter2} = full_path(file_string);
+                            end
+                        end
+                        iter1 = iter1 + 1;
+                        file_storage{iter1} = file_store;
+                        end
+
                     end
                 end
             end
@@ -107,9 +105,9 @@ classdef datasets_reading
 
             % GET ALL FILES
             if ispc
-                file_list = dir(fullfile(root_directory, '**\*.bmp'));
+                file_list = dir(fullfile(root_directory, '**\*.jpg'));
             elseif isunix
-                file_list = dir(fullfile(root_directory, '**/*.bmp'));
+                file_list = dir(fullfile(root_directory, '**/*.jpg'));
             end
 
             % CONSTRUCT FILE PATHS
@@ -199,7 +197,17 @@ classdef datasets_reading
             end
 
         end
-        
+        [~,name,~] = fileparts(full_path);
+        file_beginning = strcat(num2str(idx1,'%02.f'),'_',num2str(idx2,'%02.f'));
+        file_string = contains(full_path,file_beginning) & name(end-3:end)==num2str(index,'%04.f');
+        if ~all(file_string==0)
+            iter2 = iter2 + 1;
+            file_store{iter2} = full_path(file_string);
+        end
     end
     
+end
+end
+end
+end
 end
