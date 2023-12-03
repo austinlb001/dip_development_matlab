@@ -18,10 +18,10 @@ addpath database/
 addpath iqa_metrics/
 addpath iqa_metrics/CSV/Code/
 addpath iqa_metrics/CSV/Code/FastEMD/
-addpath /home/austinlb001/MATLAB Add-Ons/
-addpath /home/austinlb001/MATLAB Add-Ons/Collections/matlabPyrTools/
-addpath /home/austinlb001/MATLAB Add-Ons/Collections/matlabPyrTools/MEX/
-
+addpath '/home/austinlb001/MATLAB Add-Ons/'
+addpath '/home/austinlb001/MATLAB Add-Ons/Collections/matlabPyrTools/'
+addpath '/home/austinlb001/MATLAB Add-Ons/Collections/matlabPyrTools/MEX/'
+addpath '/home/austinlb001/MATLAB Add-Ons/Functions/Complex-Wavelet Structural Similarity Index (CW-SSIM)/'
 addpath iqa_metrics/MS-UNIQUE/
 addpath iqa_metrics/MS-UNIQUE/InputWeights/
 addpath iqa_metrics/SUMMER/Code/
@@ -55,9 +55,9 @@ store_CURE_OR_wavelet = cell2table({'00', '00','00' , '00', '00', '00', 0,0,0,0,
 store_CURE_OR_wavelet.Properties.VariableNames = ["Background", "DeviceID", "Object Orientation", "Object ID", "Challenge Type", "Challenge Level", "PSNR", "SSIM", "CW-SSIM", "UNIQUE", "MS-UNIQUE","CSV","SUMMER"];
 
 % iterate through groups
-parfor ii = 1:length(grouped_dir)
+parfor ii = 1%:length(grouped_dir)
     disp(ii)
-    for jj = 1:length(grouped_dir{1,ii})
+    for jj = 1%:length(grouped_dir{1,ii})
         
         % Find original/ no challenge image 
         current_group = grouped_dir{1,ii}{1,jj};
@@ -150,6 +150,9 @@ save("cure_or_workspace.mat");
 % generate file paths that are grouped by unique image scene
 grouped_dir = datasets_reading.cure_tsr_paths;
 
+%%
+
+grouped_dir = file_storage;
 % CREATE BASELINE TABLE
 store_CURE_TSR_baseline = cell2table({'00', '00','00' , '00', '0000', 0,0,0,0,0,0,0});
 store_CURE_TSR_baseline.Properties.VariableNames = ["Sequence Type", "Sign Type", "Challenge Type", "Challenge Level", "Index", "PSNR", "SSIM", "CW-SSIM", "UNIQUE", "MS-UNIQUE","CSV","SUMMER"];
@@ -163,8 +166,8 @@ store_CURE_TSR_wavelet.Properties.VariableNames = ["Sequence Type", "Sign Type",
 
 
 % iterate through groups 
-parfor ii = 1:length(grouped_dir)
-    for jj = 1:length(grouped_dir{1,ii})
+parfor ii = 1%:length(grouped_dir)
+    for jj = 1%:length(grouped_dir{1,ii})
         disp(ii)
         % Find original/ no challenge image
         current_group = grouped_dir{1,ii}{1,jj};

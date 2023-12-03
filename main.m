@@ -29,7 +29,7 @@ addpath iqa_metrics/UNIQUE-Unsupervised-Image-Quality-Estimation/
 addpath iqa_metrics/UNIQUE-Unsupervised-Image-Quality-Estimation/InputWeights/
 addpath median_filter_method/
 addpath wavelet_filter_method/
-pool = parpool('Processes', 12);
+pool = parpool('Processes', 4);
 addAttachedFiles(pool, '/home/austinlb001/MATLAB Add-Ons/');
 addAttachedFiles(pool, 'iqa_metrics/');
 addAttachedFiles(pool, 'median_filter_method/');
@@ -55,9 +55,9 @@ store_CURE_OR_wavelet = cell2table({'00', '00','00' , '00', '00', '00', 0,0,0,0,
 store_CURE_OR_wavelet.Properties.VariableNames = ["Background", "DeviceID", "Object Orientation", "Object ID", "Challenge Type", "Challenge Level", "PSNR", "SSIM", "CW-SSIM", "UNIQUE", "MS-UNIQUE","CSV","SUMMER"];
 
 % iterate through groups
-parfor ii = 1:length(grouped_dir)
+parfor ii = 1%:length(grouped_dir)
     disp(ii)
-    for jj = 1:length(grouped_dir{1,ii})
+    for jj = 1%:length(grouped_dir{1,ii})
         
         % Find original/ no challenge image 
         current_group = grouped_dir{1,ii}{1,jj};
@@ -150,6 +150,9 @@ save("cure_or_workspace.mat");
 % generate file paths that are grouped by unique image scene
 grouped_dir = datasets_reading.cure_tsr_paths;
 
+%%
+
+grouped_dir = file_storage;
 % CREATE BASELINE TABLE
 store_CURE_TSR_baseline = cell2table({'00', '00','00' , '00', '0000', 0,0,0,0,0,0,0});
 store_CURE_TSR_baseline.Properties.VariableNames = ["Sequence Type", "Sign Type", "Challenge Type", "Challenge Level", "Index", "PSNR", "SSIM", "CW-SSIM", "UNIQUE", "MS-UNIQUE","CSV","SUMMER"];
@@ -163,8 +166,8 @@ store_CURE_TSR_wavelet.Properties.VariableNames = ["Sequence Type", "Sign Type",
 
 
 % iterate through groups 
-parfor ii = 1:length(grouped_dir)
-    for jj = 1:length(grouped_dir{1,ii})
+for ii = 1%:length(grouped_dir)
+    for jj = 1%:length(grouped_dir{1,ii})
         disp(ii)
         % Find original/ no challenge image
         current_group = grouped_dir{1,ii}{1,jj};
