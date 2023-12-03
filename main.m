@@ -133,7 +133,16 @@ writetable(store_CURE_OR_median, "cure-or.xlsx", "Sheet", "Wavelet", "Range", "A
 
 
 %% CURE - TSR
+% CREATE BASELINE TABLE
+store_CURE_TSR_baseline = cell2table({'00', '00','00' , '00', '0000', 0,0,0,0,0,0,0});
+store_CURE_TSR_baseline.Properties.VariableNames = ["Sequence Type", "Sign Type", "Challenge Type", "Challenge Level", "Index", "PSNR", "SSIM", "CW-SSIM", "UNIQUE", "MS-UNIQUE","CSV","SUMMER"];
 
+% CREATE MEDIAN FILTER TABLE
+store_CURE_TSR_median = cell2table({'00', '00','00' , '00', '0000', 0,0,0,0,0,0,0});
+store_CURE_TSR_median.Properties.VariableNames = ["Sequence Type", "Sign Type", "Challenge Type", "Challenge Level", "Index", "PSNR", "SSIM", "CW-SSIM", "UNIQUE", "MS-UNIQUE","CSV","SUMMER"];
+% CREATE BASELINE TABLE
+store_CURE_TSR_wavelet = cell2table({'00', '00','00' , '00', '0000',0,0,0,0,0,0, 0});
+store_CURE_TSR_wavelet.Properties.VariableNames = ["Sequence Type", "Sign Type", "Challenge Type", "Challenge Level", "Index", "PSNR", "SSIM", "CW-SSIM", "UNIQUE", "MS-UNIQUE","CSV","SUMMER"];
 
 % generate file paths that are grouped by unique image scene
 grouped_dir = datasets_reading.cure_tsr_paths;
@@ -177,21 +186,32 @@ for ii = 1 %:length(grouped_dir)
 
             file_split = split(name,'_');
 
-            background = file_split{1};
-            device = file_split{2};
-            objOri = file_split{3};
-            objID = file_split{4};
-            chType = file_split{5};
-            chLev = file_split{6};
+            sequence = file_split{1};
+            signType = file_split{2};
+            chType = file_split{3};
+            chLev = file_split{4};
+            Index = file_split{5};
+            
+            % UPDATE BASELINE TABLE
+            new_row = {sequence,signType,chType,chLev,Index,...
+                psnr_value_baseline,ssim_value_baseline,cw_ssim_value_baseline,...
+                UNIQUE_value_baseline,MS_UNIQUE_value_baseline,...
+                csv_value_baseline, SUMMER_value_baseline};
+            store_CURE_TSR_baseline = [store_CURE_OR_baseline;new_row];
 
-            % Update table
-            if ~exist('store_CURE_TSR')
-                store_CURE_TSR = cell2table({background, device, objOri, objID, chType, chLev, psnr_value,ssim_value,cw_ssim_value,UNIQUE_value,MS_UNIQUE_value,csv_value, SUMMER_value});
-                store_CURE_TSR.Properties.VariableNames = ["Background", "DeviceID", "Object Orientation", "Object ID", "Challenge Type", "Challenge Level", "PSNR", "SSIM", "CW-SSIM", "UNIQUE", "MS-UNIQUE","CSV","SUMMER"];
-            else
-                new = {background, device, objOri, objID, chType, chLev, psnr_value,ssim_value,cw_ssim_value,UNIQUE_value,MS_UNIQUE_value,csv_value, SUMMER_value};
-                store_CURE_TSR = [store_CURE_TSR;new];
-            end
+            % UPDATE MEDIAN TABLE
+            new_row = {sequence,signType,chType,chLev,Index,...
+                psnr_value_median,ssim_value_median,cw_ssim_value_median,...
+                UNIQUE_value_median,MS_UNIQUE_value_median,...
+                csv_value_median, SUMMER_value_median};
+            store_CURE_TSR_median = [store_CURE_OR_median;new_row];
+
+            % UPDATE WAVELET TABLE
+            new_row = {sequence,signType,chType,chLev,Index,...
+                psnr_value_wavelet,ssim_value_wavelet,cw_ssim_value_wavelet,...
+                UNIQUE_value_wavelet,MS_UNIQUE_value_wavelet,...
+                csv_value_wavelet, SUMMER_value_wavelet};
+            store_CURE_TSR_wavelet = [store_CURE_OR_wavelet;new_row];
         end
     end
 end
@@ -215,18 +235,36 @@ for ii = 1:length(grouped_dir)
         no_challenge_img_path = current_group(no_challenge_img_idx);
         no_challenge_vid = VideoReader(no_challenge_img_path{1});
 
-        while hasFrame(no_challenge_vid)
-            vidFrame = readFrame(no_challenge_vid);
-            
+        frame_count = no_challenge_vid.NumFrames;
+        frames_read = 1: 10 : frame_count;
 
+%Extract every 10th frame and store in image matrix 
+
+        for k = 1:length(frames_read)
+            current_frame = read(no_challenge_vid,frames_read(k));
+            no_challenge_images(:,:,k) = squeeze(current_frame);
+                        
         end
+
+        
         % Challenge images
         current_group(no_challenge_img_idx)=[];
 
 
         for challenge = 1:length(current_group)
-            current_img_path = current_group(challenge);
-            current_img = imread(current_img_path{1});
+            current_vid_path = current_group(challenge);
+            current_vid = VideoReader(current_vid_path{1});
+
+             frame_count = current_vid.NumFrames;
+        frames_read = 1: 10 : frame_count;
+
+%Extract every 10th frame and store in image matrix 
+
+        for k = 1:length(frames_read)
+            current_frame = read(current_vid,frames_read(k));
+            current_img = squeeze(current_frame);
+                        
+        
 
             % MEDIAN FILTER
             median_filt_img = median_filter(current_img,7,'symmetric');
@@ -237,12 +275,12 @@ for ii = 1:length(grouped_dir)
             % CALCULATE BASELINE METRICS
             [psnr_value_baseline,ssim_value_baseline,cw_ssim_value_baseline,...
                 UNIQUE_value_baseline,MS_UNIQUE_value_baseline,...
-                csv_value_baseline,SUMMER_value_baseline] = metrics(current_img,no_challenge_img);
+                csv_value_baseline,SUMMER_value_baseline] = metrics(current_img,no_challenge_images(:,:,k));
 
             % CALCULATE MEDIAN FILTERED METRICS
             [psnr_value_median,ssim_value_median,cw_ssim_value_median,...
                 UNIQUE_value_median,MS_UNIQUE_value_median,...
-                csv_value_median,SUMMER_value_median] = metrics(median_filt_img,no_challenge_img);
+                csv_value_median,SUMMER_value_median] = metrics(median_filt_img,no_challenge_images(:,:,k));
 
             % CALCULATE MEDIAN FILTERED METRICS
             [psnr_value_wavelet,ssim_value_wavelet,cw_ssim_value_wavelet,...
@@ -281,6 +319,7 @@ for ii = 1:length(grouped_dir)
                 UNIQUE_value_wavelet,MS_UNIQUE_value_wavelet,...
                 csv_value_wavelet, SUMMER_value_wavelet};
             store_CURE_OR_wavelet = [store_CURE_OR_wavelet;new_row];
+        end 
         end
     end
 end
