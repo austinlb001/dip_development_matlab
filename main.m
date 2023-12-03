@@ -5,7 +5,7 @@
 % PURPOSE: THIS IS THE FILE THAT CONTAINS THE MAIN CODE
 
 % CLEAR ALL
-%clear all;
+clear all;
 
 % CLOSE ALL OPEN MATLAB WINDOWS
 close all;
@@ -141,6 +141,8 @@ writetable(store_CURE_OR_median, "cure-or.xlsx", "Sheet", "Median", "Range", "A1
 % WRITE TABLE TO EXCEL SPREADSHEET
 writetable(store_CURE_OR_wavelet, "cure-or.xlsx", "Sheet", "Wavelet", "Range", "A1");
 
+% SAVE WORKSPACE
+save("cure_or_workspace.mat");
 
 %% CURE - TSR
 
@@ -246,6 +248,8 @@ writetable(store_CURE_TSR_median, "cure-tsr.xlsx", "Sheet", "Median", "Range", "
 % WRITE TABLE TO EXCEL SPREADSHEET
 writetable(store_CURE_TSR_wavelet, "cure-tsr.xlsx", "Sheet", "Wavelet", "Range", "A1");
 
+% SAVE WORKSPACE
+save("cure_tsr_workspace.mat");
 
 %% CURE - TSD
 
@@ -264,7 +268,7 @@ store_CURE_TSD_median.Properties.VariableNames = ["Sequence Type", "Sequence Num
 store_CURE_TSD_wavelet = cell2table({'00', '00','00' , '00', '00',0,0,0,0,0,0, 0});
 store_CURE_TSD_wavelet.Properties.VariableNames = ["Sequence Type", "Sequence Number", "Challenge Source Type", "Challenge Type", "Challenge Level", "PSNR", "SSIM", "CW-SSIM", "UNIQUE", "MS-UNIQUE","CSV","SUMMER"];
 
-parfor ii = 1:length(grouped_dir)
+for ii = 1:length(grouped_dir)
     for jj = 1:length(grouped_dir{1,ii})
 
         % Find original/ no challenge image
@@ -283,8 +287,7 @@ parfor ii = 1:length(grouped_dir)
         %Extract every 10th frame and store in image matrix 
         for k = 1:length(frames_read)
             current_frame = read(no_challenge_vid,frames_read(k));
-            no_challenge_images(:,:,k) = squeeze(current_frame);
-                        
+            no_challenge_images(:,:,k) = squeeze(current_frame);            
         end
 
         
@@ -294,69 +297,80 @@ parfor ii = 1:length(grouped_dir)
             current_vid_path = current_group(challenge);
             current_vid = VideoReader(current_vid_path{1});
 
-             frame_count = current_vid.NumFrames;
-        frames_read = 1: 10 : frame_count;
+            frame_count = current_vid.NumFrames;
+            frames_read = 1: 10 : frame_count;
 
-        %Extract every 10th frame and store in image matrix 
-        for k = 1:length(frames_read)
-            current_frame = read(current_vid,frames_read(k));
-            current_img = squeeze(current_frame);
-                               
-
-            % MEDIAN FILTER
-            median_filt_img = median_filter(current_img,7,'symmetric');
-
-            % WAVELET FILTER
-            wavelet_filt_img = wavelet_filter(current_img, 'haar');
-
-            % CALCULATE BASELINE METRICS
-            [psnr_value_baseline,ssim_value_baseline,cw_ssim_value_baseline,...
-                UNIQUE_value_baseline,MS_UNIQUE_value_baseline,...
-                csv_value_baseline,SUMMER_value_baseline] = metrics(current_img,no_challenge_images(:,:,k));
-
-            % CALCULATE MEDIAN FILTERED METRICS
-            [psnr_value_median,ssim_value_median,cw_ssim_value_median,...
-                UNIQUE_value_median,MS_UNIQUE_value_median,...
-                csv_value_median,SUMMER_value_median] = metrics(median_filt_img,no_challenge_images(:,:,k));
-
-            % CALCULATE MEDIAN FILTERED METRICS
-            [psnr_value_wavelet,ssim_value_wavelet,cw_ssim_value_wavelet,...
-                UNIQUE_value_wavelet,MS_UNIQUE_value_wavelet,...
-                csv_value_wavelet,SUMMER_value_wavelet] = metrics(wavelet_filt_img,no_challenge_img);
-
-            % Metadata extract
-            [~,name,~] = fileparts(current_group(challenge));
-
-            file_split = split(name,'_');
-
-            sequenceType = file_split{1};
-            sequenceNumber = file_split{2};
-            chSrcType = file_split{3};
-            chType = file_split{4};
-            chLev = file_split{5};
-
-            % UPDATE BASELINE TABLE
-            new_row = {sequenceType, sequenceNumber, chSrcType, chType, chLev,...
-                psnr_value_baseline,ssim_value_baseline,cw_ssim_value_baseline,...
-                UNIQUE_value_baseline,MS_UNIQUE_value_baseline,...
-                csv_value_baseline, SUMMER_value_baseline};
-            store_CURE_TSD_baseline = [store_CURE_TSD_baseline;new_row];
-
-            % UPDATE MEDIAN TABLE
-            new_row = {sequenceType, sequenceNumber, chSrcType, chType, chLev,...
-                psnr_value_median,ssim_value_median,cw_ssim_value_median,...
-                UNIQUE_value_median,MS_UNIQUE_value_median,...
-                csv_value_median, SUMMER_value_median};
-            store_CURE_TSD_median = [store_CURE_TSD_median;new_row];
-
-            % UPDATE WAVELET TABLE
-            new_row = {sequenceType, sequenceNumber, chSrcType, chType, chLev,...
-                psnr_value_wavelet,ssim_value_wavelet,cw_ssim_value_wavelet,...
-                UNIQUE_value_wavelet,MS_UNIQUE_value_wavelet,...
-                csv_value_wavelet, SUMMER_value_wavelet};
-            store_CURE_TSD_wavelet = [store_CURE_TSD_wavelet;new_row];
-        end 
+            %Extract every 10th frame and store in image matrix 
+            for k = 1:length(frames_read)
+                current_frame = read(current_vid,frames_read(k));
+                current_img = squeeze(current_frame);
+                                   
+    
+                % MEDIAN FILTER
+                median_filt_img = median_filter(current_img,7,'symmetric');
+    
+                % WAVELET FILTER
+                wavelet_filt_img = wavelet_filter(current_img, 'haar');
+    
+                % CALCULATE BASELINE METRICS
+                [psnr_value_baseline,ssim_value_baseline,cw_ssim_value_baseline,...
+                    UNIQUE_value_baseline,MS_UNIQUE_value_baseline,...
+                    csv_value_baseline,SUMMER_value_baseline] = metrics(current_img,no_challenge_images(:,:,k));
+    
+                % CALCULATE MEDIAN FILTERED METRICS
+                [psnr_value_median,ssim_value_median,cw_ssim_value_median,...
+                    UNIQUE_value_median,MS_UNIQUE_value_median,...
+                    csv_value_median,SUMMER_value_median] = metrics(median_filt_img,no_challenge_images(:,:,k));
+    
+                % CALCULATE MEDIAN FILTERED METRICS
+                [psnr_value_wavelet,ssim_value_wavelet,cw_ssim_value_wavelet,...
+                    UNIQUE_value_wavelet,MS_UNIQUE_value_wavelet,...
+                    csv_value_wavelet,SUMMER_value_wavelet] = metrics(wavelet_filt_img,no_challenge_img);
+    
+                % Metadata extract
+                [~,name,~] = fileparts(current_group(challenge));
+    
+                file_split = split(name,'_');
+    
+                sequenceType = file_split{1};
+                sequenceNumber = file_split{2};
+                chSrcType = file_split{3};
+                chType = file_split{4};
+                chLev = file_split{5};
+    
+                % UPDATE BASELINE TABLE
+                new_row = {sequenceType, sequenceNumber, chSrcType, chType, chLev,...
+                    psnr_value_baseline,ssim_value_baseline,cw_ssim_value_baseline,...
+                    UNIQUE_value_baseline,MS_UNIQUE_value_baseline,...
+                    csv_value_baseline, SUMMER_value_baseline};
+                store_CURE_TSD_baseline = [store_CURE_TSD_baseline;new_row];
+    
+                % UPDATE MEDIAN TABLE
+                new_row = {sequenceType, sequenceNumber, chSrcType, chType, chLev,...
+                    psnr_value_median,ssim_value_median,cw_ssim_value_median,...
+                    UNIQUE_value_median,MS_UNIQUE_value_median,...
+                    csv_value_median, SUMMER_value_median};
+                store_CURE_TSD_median = [store_CURE_TSD_median;new_row];
+    
+                % UPDATE WAVELET TABLE
+                new_row = {sequenceType, sequenceNumber, chSrcType, chType, chLev,...
+                    psnr_value_wavelet,ssim_value_wavelet,cw_ssim_value_wavelet,...
+                    UNIQUE_value_wavelet,MS_UNIQUE_value_wavelet,...
+                    csv_value_wavelet, SUMMER_value_wavelet};
+                store_CURE_TSD_wavelet = [store_CURE_TSD_wavelet;new_row];
+            end 
         end
     end
 end
 
+% WRITE TABLE TO EXCEL SPREADSHEET
+writetable(store_CURE_TSD_baseline, "cure-tsd.xlsx", "Sheet", "Baseline", "Range", "A1");
+
+% WRITE TABLE TO EXCEL SPREADSHEET
+writetable(store_CURE_TSD_median, "cure-tsd.xlsx", "Sheet", "Median", "Range", "A1");
+
+% WRITE TABLE TO EXCEL SPREADSHEET
+writetable(store_CURE_TSD_wavelet, "cure-tsd.xlsx", "Sheet", "Wavelet", "Range", "A1");
+
+% SAVE WORKSPACE
+save("cure_tsd_workspace.mat");

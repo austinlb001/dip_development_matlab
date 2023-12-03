@@ -146,33 +146,37 @@ classdef datasets_reading
 
         function file_storage = cure_tsd_paths
 
-            % sequenceType: 1:3 (EXCLUDES 3)
-            sequenceType = [1: 2];
+            % sequenceType: 1:2 (INCLUDES 2)
+            sequenceType = 1:1:2;
 
-            % signType: 01:15 (EXCLUDES 15)
-            sequenceNumber = [1: 49];
-
-
-            file_paths_temp = [];
-            file_paths = [];
-            files_store = [];
+            % signType: 01:49 (INCLUDES 49)
+            sequenceNumber = 1:1:49;
 
             % File lists
             root_directory = "C:\Users\Katie\Documents\School\GaTech\Fall 2023 -Digital Image Processing\dippykit\Project_Images\CURE_TSR\Real_Test\Real_Test\";
             file_list = dir(fullfile(root_directory, '**\*.mp4'));
 
-            % Full file paths
-
-            for ii=1:size(file_list,1)
-
-                file_name = file_list(ii).name;
-
-                file_dir = file_list(ii).folder;
-
-                full_path{ii} = fullfile(file_dir,file_name);
-
+            % ASSIGN ROOT DIRECTORY
+            if getenv('username') == "Katie"
+                %root_directory = "C:\Users\Katie\Documents\School\GaTech\Fall 2023 -Digital Image Processing\dippykit\Project_Images\CURE_TSR\Real_Test\Real_Test\";
+            elseif getenv("USER") == "austinlb001"
+                root_directory = "/run/media/austinlb001/DATA2/CURE-TSD/data/";
             end
 
+            % GET ALL FILES
+            if ispc
+                file_list = dir(fullfile(root_directory, '**\*.bmp'));
+            elseif isunix
+                file_list = dir(fullfile(root_directory, '**/*.bmp'));
+            end
+            
+            % CONSTRUCT FILE PATHS
+            full_path = cell(size(file_list));
+            parfor ii=1:size(file_list,1)
+                full_path{ii} = fullfile(file_list(ii).folder, file_list(ii).name);
+            end
+
+            % PERFORM GROUPING
             iter1 = 0;
             for idx1 = sequenceType
                 iter2 = 0;
@@ -187,9 +191,6 @@ classdef datasets_reading
             iter1 = iter1 + 1;
             file_storage{iter1} = file_store;
             end
-
         end
-  
     end
-    
 end

@@ -11,7 +11,7 @@ function [psnr_value,ssim_value,cw_ssim_value,UNIQUE_value,MS_UNIQUE_value,csv_v
 
 % image resize 
 if size(img,1)~= size(original_img,1)
-    img = imresize(img,[size(original_img,1) size(original_img,2)],"bilinear");
+    img = imresize(img,[size(original_img,1) size(original_img,2)],"cubic");
 end
 
 
