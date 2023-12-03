@@ -97,7 +97,7 @@ classdef datasets_reading
             if getenv('username') == "Katie"
                 root_directory = "C:\Users\Katie\Documents\School\GaTech\Fall 2023 -Digital Image Processing\dippykit\Project_Images\CURE_TSR\Real_Test\Real_Test\";
             elseif getenv("USER") == "austinlb001"
-                root_directory = "/run/media/austinlb001/DATA2/CURE-TSR/test/Real_Test/";
+                root_directory = "/run/media/austinlb001/DATA2/CURE-TSR/test/";
             end
 
             % GET ALL FILES
@@ -117,21 +117,16 @@ classdef datasets_reading
             iter1 = 0;
             for idx1 = sequenceType
                 for idx2 = signType
-                    disp(idx2)
                     iter2 = 0;
                     for idx3 = index
-
-                        disp(idx3)
                         file_beginning = num2str(idx1,'%02.f') + "_" + num2str(idx2,'%02.f') ;
-                        pat = file_beginning + "_" + digitsPattern(2) + "_" +digitsPattern(2) +"_" + num2str(idx3,'%04.f');
+                        pat = file_beginning + "_" + digitsPattern(2) + "_" + digitsPattern(2) +"_" + num2str(idx3,'%04.f');
                         file_string = contains(full_path,pat);
 
                         if ~all(file_string==0)
                             iter2 = iter2 +1;
                             file_store{iter2} = full_path(file_string);
                         end
-
-                       
                     end
                  iter1 = iter1 + 1;
                         file_storage{iter1} = file_store;
