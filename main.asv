@@ -18,10 +18,10 @@ addpath database/
 addpath iqa_metrics/
 addpath iqa_metrics/CSV/Code/
 addpath iqa_metrics/CSV/Code/FastEMD/
-addpath '/home/austinlb001/MATLAB Add-Ons/'
-addpath '/home/austinlb001/MATLAB Add-Ons/Collections/matlabPyrTools/'
-addpath '/home/austinlb001/MATLAB Add-Ons/Collections/matlabPyrTools/MEX/'
-addpath '/home/austinlb001/MATLAB Add-Ons/Functions/Complex-Wavelet Structural Similarity Index (CW-SSIM)/'
+addpath /home/austinlb001/MATLAB Add-Ons/
+addpath /home/austinlb001/MATLAB Add-Ons/Collections/matlabPyrTools/
+addpath /home/austinlb001/MATLAB Add-Ons/Collections/matlabPyrTools/MEX/
+
 addpath iqa_metrics/MS-UNIQUE/
 addpath iqa_metrics/MS-UNIQUE/InputWeights/
 addpath iqa_metrics/SUMMER/Code/

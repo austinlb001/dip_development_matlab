@@ -35,5 +35,9 @@ function wavelet_filt_img = wavelet_filter(image, wavelet_type)
                 ThresholdRule = "Soft", ...
                 NoiseEstimate = "LevelIndependent");
         end
-    end       
+    end
+
+    % CONVERT IMAGE BACK TO uint8
+    wavelet_filt_img = im2uint8(wavelet_filt_img);
+    
 end
