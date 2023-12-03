@@ -26,7 +26,7 @@ classdef datasets_reading
             if getenv('username') == "Katie"
                 root_directory = "C:\Users\Katie\Documents\School\GaTech\Fall 2023 -Digital Image Processing\dippykit\Project_Images\CURE_OR\";
             elseif getenv("USER") == "austinlb001"
-                root_directory = "/run/media/austinlb001/DATA2/CURE-OR/";
+                root_directory = "/mnt/CURE-OR/";
             end
 
             % GET ALL FILES
@@ -97,7 +97,7 @@ classdef datasets_reading
             if getenv('username') == "Katie"
                 root_directory = "C:\Users\Katie\Documents\School\GaTech\Fall 2023 -Digital Image Processing\dippykit\Project_Images\CURE_TSR\Real_Test\Real_Test\";
             elseif getenv("USER") == "austinlb001"
-                root_directory = "/run/media/austinlb001/DATA2/CURE-TSR/test/";
+                root_directory = "/mnt/CURE-TSR/test/";
             end
 
             % GET ALL FILES
@@ -160,7 +160,7 @@ classdef datasets_reading
             if getenv('username') == "Katie"
                 %root_directory = "C:\Users\Katie\Documents\School\GaTech\Fall 2023 -Digital Image Processing\dippykit\Project_Images\CURE_TSR\Real_Test\Real_Test\";
             elseif getenv("USER") == "austinlb001"
-                root_directory = "/run/media/austinlb001/DATA2/CURE-TSD/data/";
+                root_directory = "/mnt/CURE-TSD/data/";
             end
 
             % GET ALL FILES

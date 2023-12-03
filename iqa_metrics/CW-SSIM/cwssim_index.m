@@ -48,9 +48,8 @@ function cwssim = cwssim_index(img1, img2, level, or, guardb, K)
 %
 % See the results: "cwssim" gives the CW-SSIM index value
 %========================================================================
-img1 = rgb2gray(im2single(img1));
-img2 = rgb2gray(im2single(img2));
-disp(size(img1))
+img1 = im2gray(img1);
+img2 = im2gray(img2);
 
 [pyr1, pind] = buildSCFpyr(img1, level, or-1);%........% decompose img1 using a complex steerable pyramid decomposition
 [pyr2, pind] = buildSCFpyr(img2, level, or-1);%........% decompose img2 using a complex steerable pyramid decomposition

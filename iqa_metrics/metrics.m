@@ -14,6 +14,8 @@ if size(img,1)~= size(original_img,1)
     img = imresize(img,[size(original_img,1) size(original_img,2)],"cubic");
 end
 
+img = double(img);
+original_img = double(original_img);
 
 % PSNR 
 psnr_value = psnr(img,original_img);
