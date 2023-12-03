@@ -16,6 +16,16 @@ clc;
 %%%%%%%%%%%%%%% A D D  P A T H S %%%%%%%%%%%%%%%
 addpath database/
 addpath iqa_metrics/
+addpath iqa_metrics/CSV/Code/
+addpath iqa_metrics/CSV/Code/FastEMD/
+addpath iqa_metrics/CW-SSIM/
+addpath iqa_metrics/CW-SSIM/matlabPyrTools-master/
+addpath iqa_metrics/CW-SSIM/matlabPyrTools-master/MEX/
+addpath iqa_metrics/MS-UNIQUE/
+addpath iqa_metrics/MS-UNIQUE/InputWeights/
+addpath iqa_metrics/SUMMER/Code/
+addpath iqa_metrics/UNIQUE-Unsupervised-Image-Quality-Estimation/
+addpath iqa_metrics/UNIQUE-Unsupervised-Image-Quality-Estimation/InputWeights/
 addpath median_filter_method/
 addpath wavelet_filter_method/
 pool = parpool('Processes', 12);
@@ -153,7 +163,7 @@ store_CURE_TSR_wavelet.Properties.VariableNames = ["Background", "DeviceID", "Ob
 % iterate through groups
 
 % iterate through groups 
-for ii = 1 %:length(grouped_dir)
+parfor ii = 1 %:length(grouped_dir)
     for jj = 1:2 % length(grouped_dir{1,1})
         disp(ii)
         % Find original/ no challenge image
@@ -212,24 +222,34 @@ for ii = 1 %:length(grouped_dir)
                 psnr_value_baseline,ssim_value_baseline,cw_ssim_value_baseline,...
                 UNIQUE_value_baseline,MS_UNIQUE_value_baseline,...
                 csv_value_baseline, SUMMER_value_baseline};
-            store_CURE_TSR_baseline = [store_CURE_OR_baseline;new_row];
+            store_CURE_TSR_baseline = [store_CURE_TSR_baseline;new_row];
 
             % UPDATE MEDIAN TABLE 
             new_row = {background, device, objOri, objID, chType, chLev,...
                 psnr_value_median,ssim_value_median,cw_ssim_value_median,...
                 UNIQUE_value_median,MS_UNIQUE_value_median,...
                 csv_value_median, SUMMER_value_median};
-            store_CURE_TSR_median = [store_CURE_OR_median;new_row];
+            store_CURE_TSR_median = [store_CURE_TSR_median;new_row];
 
             % UPDATE WAVELET TABLE 
             new_row = {background, device, objOri, objID, chType, chLev,...
                 psnr_value_wavelet,ssim_value_wavelet,cw_ssim_value_wavelet,...
                 UNIQUE_value_wavelet,MS_UNIQUE_value_wavelet,...
                 csv_value_wavelet, SUMMER_value_wavelet};
-            store_CURE_TSR_wavelet = [store_CURE_OR_wavelet;new_row];
+            store_CURE_TSR_wavelet = [store_CURE_TSR_wavelet;new_row];
         end              
     end 
 end
+
+% WRITE TABLE TO EXCEL SPREADSHEET
+writetable(store_CURE_TSR_baseline, "cure-tsr.xlsx", "Sheet", "Baseline", "Range", "A1");
+
+% WRITE TABLE TO EXCEL SPREADSHEET
+writetable(store_CURE_TSR_median, "cure-tsr.xlsx", "Sheet", "Median", "Range", "A1");
+
+% WRITE TABLE TO EXCEL SPREADSHEET
+writetable(store_CURE_TSR_wavelet, "cure-tsr.xlsx", "Sheet", "Wavelet", "Range", "A1");
+
 
 %% CURE - TSD
 
