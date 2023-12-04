@@ -5,7 +5,7 @@
 % PURPOSE: THIS IS THE FILE THAT CONTAINS THE MAIN CODE
 
 % CLEAR ALL
-clear all;
+%clear all;
 
 % CLOSE ALL OPEN MATLAB WINDOWS
 close all;
@@ -42,6 +42,8 @@ addAttachedFiles(pool, 'wavelet_filter_method/');
 % generate file paths that are grouped by unique image scene
 grouped_dir = datasets_reading.cure_or_paths;
 
+%%
+
 % CREATE BASELINE TABLE
 store_CURE_OR_baseline = cell2table({'00', '00','00' , '00', '00', '00', 0,0,0,0,0,0, 0});
 store_CURE_OR_baseline.Properties.VariableNames = ["Background", "DeviceID", "Object Orientation", "Object ID", "Challenge Type", "Challenge Level", "PSNR", "SSIM", "CW-SSIM", "UNIQUE", "MS-UNIQUE","CSV","SUMMER"];
@@ -55,9 +57,9 @@ store_CURE_OR_wavelet = cell2table({'00', '00','00' , '00', '00', '00', 0,0,0,0,
 store_CURE_OR_wavelet.Properties.VariableNames = ["Background", "DeviceID", "Object Orientation", "Object ID", "Challenge Type", "Challenge Level", "PSNR", "SSIM", "CW-SSIM", "UNIQUE", "MS-UNIQUE","CSV","SUMMER"];
 
 % iterate through groups
-parfor ii = 1%:length(grouped_dir)
+parfor ii = 1:length(grouped_dir)
     disp(ii)
-    for jj = 1%:length(grouped_dir{1,ii})
+    for jj = 1:40:length(grouped_dir{1,ii})
         
         % Find original/ no challenge image 
         current_group = grouped_dir{1,ii}{1,jj};
@@ -72,7 +74,7 @@ parfor ii = 1%:length(grouped_dir)
         current_group(no_challenge_img_idx)=[];
 
 
-        for challenge = 1:length(current_group)
+        for challenge = 1:5:length(current_group)
             current_img_path = current_group(challenge);
             current_img = imread(current_img_path{1});
 
