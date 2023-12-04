@@ -35,7 +35,7 @@ function [psnr_value,ssim_value,cw_ssim_value,UNIQUE_value,MS_UNIQUE_value,csv_v
         SUMMER_value = SUMMER(original_img,img);
     
         % CW-SSIM (GRAYSCALE)
-        cw_ssim_value = cwssim_index(im2gray(img), im2gray(original_img),4,4,0,0);
+        cw_ssim_value = cwssim_index(im2gray(img), im2gray(original_img),1,4,0,0);
     
     % GRAYSCALE IMAGES
     elseif length(size(img)) == 2
@@ -47,7 +47,7 @@ function [psnr_value,ssim_value,cw_ssim_value,UNIQUE_value,MS_UNIQUE_value,csv_v
         ssim_value = ssim(img, original_img);
     
         % CW-SSIM (GRAYSCALE)
-        cw_ssim_value = cwssim_index(img, original_img,4,4,0,0);
+        cw_ssim_value = cwssim_index(img, original_img,1,4,0,0);
         
         % UNIQUE (COLOR)
         img = cat(3, img, img, img);

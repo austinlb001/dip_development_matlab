@@ -29,7 +29,7 @@ addpath iqa_metrics/UNIQUE-Unsupervised-Image-Quality-Estimation/
 addpath iqa_metrics/UNIQUE-Unsupervised-Image-Quality-Estimation/InputWeights/
 addpath median_filter_method/
 addpath wavelet_filter_method/
-pool = parpool('Processes', 12);
+pool = parpool('Processes', 4);
 addAttachedFiles(pool, '/home/austinlb001/MATLAB Add-Ons/');
 addAttachedFiles(pool, 'iqa_metrics/');
 addAttachedFiles(pool, 'median_filter_method/');
@@ -164,11 +164,14 @@ store_CURE_TSR_median.Properties.VariableNames = ["Sequence Type", "Sign Type", 
 store_CURE_TSR_wavelet = cell2table({'00', '00','00' , '00', '0000',0,0,0,0,0,0, 0});
 store_CURE_TSR_wavelet.Properties.VariableNames = ["Sequence Type", "Sign Type", "Challenge Type", "Challenge Level", "Index", "PSNR", "SSIM", "CW-SSIM", "UNIQUE", "MS-UNIQUE","CSV","SUMMER"];
 
+% ppm = ParforProgressbar(length(current_group),'showWorkerProgress',true) %'parpool', {'local', 4});
+% 
+% pauseTime = 60/1200;
 
+tic
 % iterate through groups 
-parfor ii = 1%:length(grouped_dir)
-    for jj = 1%:length(grouped_dir{1,ii})
-        disp(ii)
+parfor ii = 1:13%:length(grouped_dir)
+    for jj = 1:118:length(grouped_dir{1,ii})
         % Find original/ no challenge image
         current_group = grouped_dir{1,ii}{1,jj};
 
@@ -239,10 +242,13 @@ parfor ii = 1%:length(grouped_dir)
                 UNIQUE_value_wavelet,MS_UNIQUE_value_wavelet,...
                 csv_value_wavelet, SUMMER_value_wavelet};
             store_CURE_TSR_wavelet = [store_CURE_TSR_wavelet;new_row];
+        
         end              
     end 
-end
 
+
+end
+toc
 % WRITE TABLE TO EXCEL SPREADSHEET
 writetable(store_CURE_TSR_baseline, "cure-tsr.xlsx", "Sheet", "Baseline", "Range", "A1");
 
