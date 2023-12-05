@@ -28,6 +28,7 @@ classdef datasets_reading
             elseif getenv("USER") == "austinlb001"
                 root_directory = "/mnt/CURE-OR/";
             end
+                root_directory = "C:\Users\Katie\Documents\School\GaTech\Fall 2023 -Digital Image Processing\dippykit\Project_Images\CURE_OR\";
 
             % GET ALL FILES
             if ispc

@@ -57,7 +57,7 @@ store_CURE_OR_wavelet = cell2table({'00', '00','00' , '00', '00', '00', 0,0,0,0,
 store_CURE_OR_wavelet.Properties.VariableNames = ["Background", "DeviceID", "Object Orientation", "Object ID", "Challenge Type", "Challenge Level", "PSNR", "SSIM", "CW-SSIM", "UNIQUE", "MS-UNIQUE","CSV","SUMMER"];
 
 % iterate through groups
-parfor ii = 1:length(grouped_dir)
+for ii = 7:length(grouped_dir)
     disp(ii)
     for jj = 1:40:length(grouped_dir{1,ii})
         
