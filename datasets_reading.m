@@ -189,5 +189,55 @@ classdef datasets_reading
             file_storage{iter1} = file_store;
             end
         end
+
+        %%%%%%%%%%%%%%%%%%%%% SIDD %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+        function file_storage=sidd_paths
+            % BACKGROUND: 1:200 (INCLUDES 200)
+            scene_instance_number = 1:1:200;
+
+            % DEVICE TYPE: 1:5 (INCLUDES 10)
+            scene_number = 1:1:10;
+
+            % ASSIGN ROOT DIRECTORY
+            if getenv('username') == "Katie"
+                root_directory = "C:\Users\Katie\Documents\School\GaTech\Fall 2023 -Digital Image Processing\dippykit\Project_Images\CURE_OR\";
+            elseif getenv("USER") == "austinlb001"
+                root_directory = "/mnt/SIDD/SIDD_Small_sRGB_Only/Data/";
+            end
+
+            % GET ALL FILES
+            if ispc
+                file_list = dir(fullfile(root_directory, '**\*.PNG'));
+            elseif isunix
+                file_list = dir(fullfile(root_directory, '**/*.PNG'));
+            end
+
+            % CONSTRUCT FILE PATHS
+            full_path = cell(size(file_list));
+            parfor ii=1:size(file_list,1)
+                    full_path{ii} = fullfile(file_list(ii).folder, file_list(ii).name);
+            end
+
+            % SORT FILE PATHS
+            iter1 = 0;
+            file_store = cell(0);
+            for idx1=scene_instance_number
+                iter2 = 0;
+                for idx2=scene_number      
+                    file_beginning = strcat(num2str(idx1, '%04.f'),"_",num2str(idx2, '%03.f'));                          
+                    file_string = contains(full_path,file_beginning);
+                    if ~all(file_string==0)
+                        iter2 = iter2 + 1;
+                        file_store{iter2} = full_path(file_string);
+                        full_path(file_string) = [];
+                    end
+                end
+                iter1 = iter1 + 1;
+                file_storage{iter1} = file_store;
+            end
+
+        end
+
     end
 end
