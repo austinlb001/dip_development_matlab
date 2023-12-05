@@ -152,10 +152,6 @@ classdef datasets_reading
             % signType: 01:49 (INCLUDES 49)
             sequenceNumber = 1:1:49;
 
-            % File lists
-            root_directory = "C:\Users\Katie\Documents\School\GaTech\Fall 2023 -Digital Image Processing\dippykit\Project_Images\CURE_TSR\Real_Test\Real_Test\";
-            file_list = dir(fullfile(root_directory, '**\*.mp4'));
-
             % ASSIGN ROOT DIRECTORY
             if getenv('username') == "Katie"
                 %root_directory = "C:\Users\Katie\Documents\School\GaTech\Fall 2023 -Digital Image Processing\dippykit\Project_Images\CURE_TSR\Real_Test\Real_Test\";
@@ -165,9 +161,9 @@ classdef datasets_reading
 
             % GET ALL FILES
             if ispc
-                file_list = dir(fullfile(root_directory, '**\*.bmp'));
+                file_list = dir(fullfile(root_directory, '**\*.mp4'));
             elseif isunix
-                file_list = dir(fullfile(root_directory, '**/*.bmp'));
+                file_list = dir(fullfile(root_directory, '**/*.mp4'));
             end
             
             % CONSTRUCT FILE PATHS
@@ -178,6 +174,7 @@ classdef datasets_reading
 
             % PERFORM GROUPING
             iter1 = 0;
+            file_store = cell(0);
             for idx1 = sequenceType
                 iter2 = 0;
                 for idx2 = sequenceNumber

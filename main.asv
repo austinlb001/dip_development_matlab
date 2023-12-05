@@ -59,7 +59,7 @@ store_CURE_OR_wavelet.Properties.VariableNames = ["Background", "DeviceID", "Obj
 % iterate through groups
 parfor ii = 1:length(grouped_dir)
     disp(ii)
-    for jj = 1:length(grouped_dir{1,ii})
+    for jj = 1:40:length(grouped_dir{1,ii})
         
         % Find original/ no challenge image 
         current_group = grouped_dir{1,ii}{1,jj};
@@ -74,7 +74,7 @@ parfor ii = 1:length(grouped_dir)
         current_group(no_challenge_img_idx)=[];
 
 
-        for challenge = 1:4:length(current_group)
+        for challenge = 1:5:length(current_group)
             current_img_path = current_group(challenge);
             current_img = imread(current_img_path{1});
 
@@ -172,9 +172,8 @@ store_CURE_TSR_wavelet.Properties.VariableNames = ["Sequence Type", "Sign Type",
 
 tic
 % iterate through groups 
-parfor ii = 1%:length(grouped_dir)
-    for jj = 1%:length(grouped_dir{1,ii})
-        disp(ii)
+parfor ii = 1:13%:length(grouped_dir)
+    for jj = 1:118:length(grouped_dir{1,ii})
         % Find original/ no challenge image
         current_group = grouped_dir{1,ii}{1,jj};
 
@@ -269,6 +268,8 @@ save("cure_tsr_workspace.mat");
 % generate file paths that are grouped by unique image scene
 grouped_dir = datasets_reading.cure_tsd_paths;
 
+%%
+
 % CREATE BASELINE TABLE
 store_CURE_TSD_baseline = cell2table({'00', '00', '00' , '00','00', 0,0,0,0,0,0, 0});
 store_CURE_TSD_baseline.Properties.VariableNames = ["Sequence Type", "Sequence Number", "Challenge Source Type", "Challenge Type", "Challenge Level", "PSNR", "SSIM", "CW-SSIM", "UNIQUE", "MS-UNIQUE","CSV","SUMMER"];
@@ -281,44 +282,40 @@ store_CURE_TSD_median.Properties.VariableNames = ["Sequence Type", "Sequence Num
 store_CURE_TSD_wavelet = cell2table({'00', '00','00' , '00', '00',0,0,0,0,0,0, 0});
 store_CURE_TSD_wavelet.Properties.VariableNames = ["Sequence Type", "Sequence Number", "Challenge Source Type", "Challenge Type", "Challenge Level", "PSNR", "SSIM", "CW-SSIM", "UNIQUE", "MS-UNIQUE","CSV","SUMMER"];
 
-for ii = 1:length(grouped_dir)
-    for jj = 1:length(grouped_dir{1,ii})
+pfor ii = 1:length(grouped_dir)
+    for jj = 1:10:length(grouped_dir{1,ii})
 
         % Find original/ no challenge image
         current_group = grouped_dir{1,ii}{1,jj};
-        challenge_check=contains(current_group,'ChallengeFree');
+        challenge_check=contains(current_group,'_00_00_00');
         no_challenge_img_idx = find(challenge_check);
-
 
         % no challenge image path
         no_challenge_img_path = current_group(no_challenge_img_idx);
         no_challenge_vid = VideoReader(no_challenge_img_path{1});
 
-        frame_count = no_challenge_vid.NumFrames;
-        frames_read = 1: 10 : frame_count;
-
-        %Extract every 10th frame and store in image matrix 
+        % Extract every 20th frame and store in image matrix
+        frame_count = 300;
+        frames_read = 1: 20 : frame_count;
         for k = 1:length(frames_read)
             current_frame = read(no_challenge_vid,frames_read(k));
-            no_challenge_images(:,:,k) = squeeze(current_frame);            
+            no_challenge_images(:,:,:,k) = squeeze(current_frame);            
         end
 
         
         % Challenge images
         current_group(no_challenge_img_idx)=[];
-        for challenge = 1:length(current_group)
+        for challenge = 1:20:length(current_group)
             current_vid_path = current_group(challenge);
             current_vid = VideoReader(current_vid_path{1});
 
+            %Extract every 20th frame and store in image matrix 
             frame_count = current_vid.NumFrames;
-            frames_read = 1: 10 : frame_count;
-
-            %Extract every 10th frame and store in image matrix 
+            frames_read = 1:20: frame_count;
             for k = 1:length(frames_read)
                 current_frame = read(current_vid,frames_read(k));
                 current_img = squeeze(current_frame);
                                    
-    
                 % MEDIAN FILTER
                 median_filt_img = median_filter(current_img,7,'symmetric');
     
@@ -328,17 +325,17 @@ for ii = 1:length(grouped_dir)
                 % CALCULATE BASELINE METRICS
                 [psnr_value_baseline,ssim_value_baseline,cw_ssim_value_baseline,...
                     UNIQUE_value_baseline,MS_UNIQUE_value_baseline,...
-                    csv_value_baseline,SUMMER_value_baseline] = metrics(current_img,no_challenge_images(:,:,k));
+                    csv_value_baseline,SUMMER_value_baseline] = metrics(current_img,no_challenge_images(:,:,:,k));
     
                 % CALCULATE MEDIAN FILTERED METRICS
                 [psnr_value_median,ssim_value_median,cw_ssim_value_median,...
                     UNIQUE_value_median,MS_UNIQUE_value_median,...
-                    csv_value_median,SUMMER_value_median] = metrics(median_filt_img,no_challenge_images(:,:,k));
+                    csv_value_median,SUMMER_value_median] = metrics(median_filt_img,no_challenge_images(:,:,:,k));
     
                 % CALCULATE MEDIAN FILTERED METRICS
                 [psnr_value_wavelet,ssim_value_wavelet,cw_ssim_value_wavelet,...
                     UNIQUE_value_wavelet,MS_UNIQUE_value_wavelet,...
-                    csv_value_wavelet,SUMMER_value_wavelet] = metrics(wavelet_filt_img,no_challenge_img);
+                    csv_value_wavelet,SUMMER_value_wavelet] = metrics(wavelet_filt_img,no_challenge_images(:,:,:,k));
     
                 % Metadata extract
                 [~,name,~] = fileparts(current_group(challenge));
